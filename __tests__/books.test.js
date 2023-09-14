@@ -49,7 +49,7 @@ describe('POST /books', function () {
         });
         expect(response.statusCode).toBe(400);
         expect(response.body).toHaveProperty('error');
-        expect(response.body.error.message).toContain(
+        expect(response.body.error.errors).toContain(
             'instance requires property "isbn"'
         );
     });
@@ -79,7 +79,7 @@ describe('GET /books/ :isbn', function () {
         expect(response.statusCode).toBe(404);
         expect(response.body).toHaveProperty('error');
         expect(response.body.error.message).toContain(
-            "There is no book with an isbn '36664"
+            "There is no book with an isbn '36664'"
         );
     });
 });
@@ -112,7 +112,7 @@ describe('PUT /books/:isbn', function () {
         expect(response.statusCode).toBe(404);
         expect(response.body).toHaveProperty('error');
         expect(response.body.error.message).toContain(
-            "There is no book with an isbn '36664"
+            "There is no book with an isbn '36664'"
         );
     });
 });
@@ -131,7 +131,7 @@ describe('DELETE /books/ :isbn', function () {
         expect(response.statusCode).toBe(404);
         expect(response.body).toHaveProperty('error');
         expect(response.body.error.message).toContain(
-            "There is no book with an isbn '36664"
+            "There is no book with an isbn '36664'"
         );
     });
 });

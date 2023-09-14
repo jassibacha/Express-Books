@@ -37,7 +37,10 @@ router.post('/', async function (req, res, next) {
         const validation = jsonschema.validate(req.body, bookSchemaNew);
         if (!validation.valid) {
             let errors = validation.errors.map((error) => error.stack);
-            return next(new ExpressError(errors, 400));
+            return next({
+                status: 400,
+                errors: errors,
+            });
         }
         const book = await Book.create(req.body);
         return res.status(201).json({ book });
@@ -53,7 +56,10 @@ router.put('/:isbn', async function (req, res, next) {
         const validation = jsonschema.validate(req.body, bookSchemaUpdate);
         if (!validation.valid) {
             let errors = validation.errors.map((error) => error.stack);
-            return next(new ExpressError(errors, 400));
+            return next({
+                status: 400,
+                errors: errors,
+            });
         }
         const book = await Book.update(req.params.isbn, req.body);
         return res.json({ book });
