@@ -1,0 +1,74 @@
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://example.com/object1694648532.json",
+    "title": "Root",
+    "type": "object",
+    "required": ["author", "language", "pages", "title", "year"],
+    "properties": {
+        "isbn": {
+            "$id": "#root/isbn",
+            "title": "Isbn",
+            "type": "string",
+            "default": "",
+            "examples": ["0691161518"],
+            "pattern": "^.*$"
+        },
+        "amazon_url": {
+            "$id": "#root/amazon_url",
+            "title": "Amazon_url",
+            "type": "string",
+            "default": "",
+            "examples": ["http://a.co/eobPtX2"],
+            "pattern": "^.*$"
+        },
+        "author": {
+            "$id": "#root/author",
+            "title": "Author",
+            "type": "string",
+            "default": "",
+            "examples": ["Matthew Lane"],
+            "pattern": "^.*$"
+        },
+        "language": {
+            "$id": "#root/language",
+            "title": "Language",
+            "type": "string",
+            "default": "",
+            "examples": ["english"],
+            "pattern": "^.*$"
+        },
+        "pages": {
+            "$id": "#root/pages",
+            "title": "Pages",
+            "type": "integer",
+            "examples": [264],
+            "default": 0
+        },
+        "publisher": {
+            "$id": "#root/publisher",
+            "title": "Publisher",
+            "type": "string",
+            "default": "",
+            "examples": ["Princeton University Press"],
+            "pattern": "^.*$"
+        },
+        "title": {
+            "$id": "#root/title",
+            "title": "Title",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "Power-Up: Unlocking the Hidden Mathematics in Video Games"
+            ],
+            "pattern": "^.*$"
+        },
+        "year": {
+            "$id": "#root/year",
+            "title": "Year",
+            "type": "integer",
+            "examples": [2017],
+            "default": 0
+        }
+    }
+}

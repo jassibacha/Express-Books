@@ -6,6 +6,7 @@ const router = new express.Router();
 const ExpressError = require('../expressError');
 const jsonschema = require('jsonschema');
 const bookSchemaNew = require('../schemas/bookSchemaNew.json');
+const bookSchemaUpdate = require('../schemas/bookSchemaUpdate.json');
 
 /** GET / => {books: [book, ...]}  */
 
@@ -49,6 +50,11 @@ router.post('/', async function (req, res, next) {
 
 router.put('/:isbn', async function (req, res, next) {
     try {
+        const validation = jsonschema.validate(req.body, bookSchemaUpdate);
+        if (!validation.valid) {
+            let errors = validation.errors.map((error) => error.stack);
+            return next(new ExpressError(errors, 400));
+        }
         const book = await Book.update(req.params.isbn, req.body);
         return res.json({ book });
     } catch (err) {
