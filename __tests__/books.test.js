@@ -22,9 +22,9 @@ beforeEach(async function () {
 });
 
 // post + post error
-describe('POST Testing', function () {
+describe('POST /books', function () {
     test('Create New Book', async function () {
-        let response = await request(app).post('/books/').send({
+        let response = await request(app).post('/books').send({
             isbn: '23456789',
             amazon_url: 'https://amzn.co/test2',
             author: 'George RR Martin',
@@ -38,7 +38,7 @@ describe('POST Testing', function () {
         expect(response.body.book).toHaveProperty('isbn');
     });
     test('Attempt creation without an isbn', async function () {
-        let response = await request(app).post('/books/').send({
+        let response = await request(app).post('/books').send({
             amazon_url: 'https://amzn.co/test2',
             author: 'George RR Martin',
             language: 'English',
@@ -56,12 +56,85 @@ describe('POST Testing', function () {
 });
 
 // get
+describe('GET /books', function () {
+    test('Get all books', async function () {
+        let response = await request(app).get('/books');
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('books');
+        expect(response.body.books[0]).toHaveProperty('isbn');
+    });
+});
 
 // get/isbn + 404
 
+describe('GET /books/ :isbn', function () {
+    test('Grab a single book by isbn', async function () {
+        let response = await request(app).get(`/books/${book_isbn}`);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('book');
+        expect(response.body.book.isbn).toBe(book_isbn);
+    });
+    test('404 from a bad isbn', async function () {
+        let response = await request(app).get(`/books/36664`);
+        expect(response.statusCode).toBe(404);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error.message).toContain(
+            "There is no book with an isbn '36664"
+        );
+    });
+});
+
 // put + bad update
+describe('PUT /books/:isbn', function () {
+    test('Update existing book', async function () {
+        let response = await request(app).put(`/books/${book_isbn}`).send({
+            amazon_url: 'https://amzn.co/test2',
+            author: 'George RR Martin',
+            language: 'English',
+            pages: 987,
+            publisher: 'Someone',
+            title: 'A Dance with Dragons X7',
+            year: 2022,
+        });
+        expect(response.statusCode).toBe(200);
+        expect(response.body.book.title).toBe('A Dance with Dragons X7');
+    });
+    test('404 from a bad isbn', async function () {
+        let response = await request(app).put('/books/36664').send({
+            amazon_url: 'https://amzn.co/test2',
+            author: 'George RR Martin',
+            language: 'English',
+            pages: 987,
+            publisher: 'Someone',
+            title: 'A Dance with Dragons X7',
+            year: 2022,
+        });
+        expect(response.statusCode).toBe(404);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error.message).toContain(
+            "There is no book with an isbn '36664"
+        );
+    });
+});
 
 // delete + 404
+describe('DELETE /books/ :isbn', function () {
+    test('Delete a single book by isbn', async function () {
+        let response = await request(app).delete(`/books/${book_isbn}`);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual({
+            message: 'Book deleted',
+        });
+    });
+    test('404 from a bad isbn', async function () {
+        let response = await request(app).delete(`/books/36664`);
+        expect(response.statusCode).toBe(404);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error.message).toContain(
+            "There is no book with an isbn '36664"
+        );
+    });
+});
 
 afterEach(async function () {
     await db.query(`DELETE FROM BOOKS`);
